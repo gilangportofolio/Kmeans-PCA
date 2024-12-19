@@ -1,0 +1,86 @@
+{% include 'header.html' %}
+<div id="content">
+
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+
+
+        <!-- DataTales Example -->
+        <ul class="list-inline">
+            <li class="fcolor list-inline-item">
+                <h4 class="text-gray-900">Lihat Dataset<i class="fas fa-ellipsis-v ml-4"></i></h4>
+            </li>
+            <i class="fas fa-home ml-3 text-gray-900"></i>
+            <i class="fas fa-angle-right ml-2 "></i>
+            <li class="list-inline-item ml-2 text-gray-900">Kelola Dataset</li>
+            <i class="fas fa-angle-right ml-2"></i>
+            <li class="list-inline-item ml-2 text-gray-900">Lihat Dataset</li>
+        </ul>
+
+        <div class="card shadow mb-4 mt-4">
+            <!-- <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Data Petugas</h6>
+        </div> -->
+            <div class="card-body ">
+                <div class="table-responsive text-gray-900">
+                    <table class="table table-bordered text-gray-900" id="dataTable" width="100%" cellspacing="0">
+                        <div class="row">
+                            <div class=" col-md-12">
+
+                                <thead style="text-align: center">
+                                    <tr>
+                                        <th style="width: 10px; vertical-align: middle;">No</th>
+                                        <th style="vertical-align: middle;">Sasaran</th>
+                                        <th style="vertical-align: middle;">Januari</th>
+                                        <th style="vertical-align: middle;">Februari</th>
+                                        <th style="vertical-align: middle;">Maret</th>
+                                        <th style="vertical-align: middle;">April</th>
+                                        <th style="vertical-align: middle;">Mei</th>
+                                        <th style="vertical-align: middle;">Juni</th>
+                                        <th style="vertical-align: middle;">Juli</th>
+                                        <th style="vertical-align: middle;">Agustus</th>
+                                        <th style="vertical-align: middle;">September</th>
+                                        <th style="vertical-align: middle;">Oktober</th>
+                                        <th style="vertical-align: middle;">November</th>
+                                        <th style="vertical-align: middle;">Desember</th>
+                                        <th style="vertical-align: middle;">Total</th>
+                                        <th style="vertical-align: middle;">Kumulatif</th>
+                                    </tr>
+                                </thead>
+
+
+                                <tbody>
+                                    {% for rs in datacsv %}
+                                    <tr>
+
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ rs['Sasaran']}}</td>
+                                        <td>{{ rs['Januari']}}</td>
+                                        <td>{{ rs['Februari']}}</td>
+                                        <td>{{ rs['Maret']}}</td>
+                                        <td>{{ rs['April']}}</td>
+                                        <td>{{ rs['Mei']}}</td>
+                                        <td>{{ rs['Juni']}}</td>
+                                        <td>{{ rs['Juli']}}</td>
+                                        <td>{{ rs['Agustus']}}</td>
+                                        <td>{{ rs['September']}}</td>
+                                        <td>{{ rs['Oktober']}}</td>
+                                        <td>{{ rs['November']}}</td>
+                                        <td>{{ rs['Desember']}}</td>
+                                        <td>{{ rs['Total']}}</td>
+                                        <td>{{ rs['Kumulatif']}}</td>
+
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+</div>
+{% include 'footer.html' %}

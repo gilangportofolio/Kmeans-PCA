@@ -1,0 +1,105 @@
+{% include 'header.html' %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <!-- Content Row -->
+    <div class="d-flex justify-content-center align-items-center mt-3" style="width: 100%;">
+        <div class="text-center">
+            <h2 class="text-gray-900">ANALISA TEMPAT KUNJUNGAN WISATAWAN MENGGUNAKAN</h2>
+            <h2 class="text-gray-900">PRINCIPAL COMPONENT ANALYSIS PADA METODE K-MEANS</h2>
+        </div>
+    </div>
+
+    <!-- Menu Cards -->
+    <div class="row mt-4">
+        <div class="col-xl-6 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                <a href="/hitungcluster_kmeans" class="text-decoration-none">
+                                    <i class="fas fa-chart-pie fa-2x text-gray-300 mb-2"></i>
+                                    <br>Analisis K-Means
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                <a href="/hitungpca" class="text-decoration-none">
+                                    <i class="fas fa-chart-line fa-2x text-gray-300 mb-2"></i>
+                                    <br>Analisis PCA
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dataset Table -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Dataset Kunjungan Wisatawan</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Sasaran</th>
+                            <th>Januari</th>
+                            <th>Februari</th>
+                            <th>Maret</th>
+                            <th>April</th>
+                            <th>Mei</th>
+                            <th>Juni</th>
+                            <th>Juli</th>
+                            <th>Agustus</th>
+                            <th>September</th>
+                            <th>Oktober</th>
+                            <th>November</th>
+                            <th>Desember</th>
+                            <th>Total</th>
+                            <th>Kumulatif</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rs in datacsv %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ rs['Sasaran']}}</td>
+                            <td>{{ rs['Januari']}}</td>
+                            <td>{{ rs['Februari']}}</td>
+                            <td>{{ rs['Maret']}}</td>
+                            <td>{{ rs['April']}}</td>
+                            <td>{{ rs['Mei']}}</td>
+                            <td>{{ rs['Juni']}}</td>
+                            <td>{{ rs['Juli']}}</td>
+                            <td>{{ rs['Agustus']}}</td>
+                            <td>{{ rs['September']}}</td>
+                            <td>{{ rs['Oktober']}}</td>
+                            <td>{{ rs['November']}}</td>
+                            <td>{{ rs['Desember']}}</td>
+                            <td>{{ rs['Total']}}</td>
+                            <td>{{ rs['Kumulatif']}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'footer.html' %}

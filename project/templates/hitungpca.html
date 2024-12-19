@@ -1,0 +1,227 @@
+{% include 'header.html' %}
+
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Analisis PCA</h6>
+        </div>
+        <div class="card-body">
+            <form method="POST" class="form-inline mb-3">
+                <div class="form-group mr-2">
+                    <label class="mr-2">Jumlah Komponen PCA (1-12):</label>
+                    <input type="number" class="form-control" name="jumlah_komponen" min="1" max="12" required>
+                </div>
+                <button type="submit" class="btn btn-primary mr-2">Hitung PCA</button>
+                {% if total_variance %}
+                <a href="{{ url_for('hasil_pca') }}" class="btn btn-success">
+                    <i class="fas fa-download"></i> Download Hasil
+                </a>
+                {% endif %}
+            </form>
+
+            {% if error %}
+            <div class="alert alert-danger mt-3">{{ error }}</div>
+            {% endif %}
+
+
+            <!-- Hasil Analisis -->
+            <div class="alert alert-info">
+                <h5>Total variance yang dijelaskan: {{ total_variance }}</h5>
+            </div>
+
+            <!-- Scree Plot Section -->
+            {% if scree_plot %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-primary">Scree Plot & Cumulative Variance</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <img src="data:image/png;base64,{{ scree_plot }}" class="img-fluid">
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-header bg-light">
+                                    <h6 class="m-0 font-weight-bold">Interpretasi Scree Plot:</h6>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                        {% if scree_interpretations %}
+                                            {% for interpretation in scree_interpretations %}
+                                            <li class="list-group-item">{{ interpretation }}</li>
+                                            {% endfor %}
+                                        {% else %}
+                                            <li class="list-group-item">Belum ada interpretasi tersedia</li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Analisis Explained Variance -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-primary">Analisis Explained Variance</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            {% if variance_interpretations %}
+                            <ul class="list-group">
+                                {% for interpretation in variance_interpretations %}
+                                <li class="list-group-item">{{ interpretation }}</li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Biplot Section -->
+            {% if biplot %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-primary">PCA Biplot</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Grafik di kiri -->
+                        <div class="col-md-8">
+                            <img src="data:image/png;base64,{{ biplot }}" class="img-fluid">
+                        </div>
+                        <!-- Interpretasi di kanan -->
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-header bg-light">
+                                    <h6 class="m-0 font-weight-bold">Interpretasi Biplot:</h6>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                        {% for interpretation in biplot_interpretations %}
+                                        <li class="list-group-item">{{ interpretation }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if scaling_interpretations %}
+            <div class="card mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Informasi Normalisasi Data</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for interpretation in scaling_interpretations %}
+                        <li class="list-group-item">{{ interpretation }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if analysis_results and analysis_results.transformed_data %}
+            <!-- Tabel Hasil PCA -->
+            <div class="card mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Hasil Transformasi PCA</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Kategori</th>
+                                    {% for i in range(analysis_results.transformed_data[0]|length - 1) %}
+                                    <th>PC{{ i+1 }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in analysis_results.transformed_data %}
+                                <tr>
+                                    <td>{{ row.Kategori }}</td>
+                                    {% for i in range(row|length - 1) %}
+                                    <td>{{ "%.4f"|format(row['PC' ~ (i+1)]|float) }}</td>
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Analisis Kontribusi Fitur dalam 2 kolom -->
+            {% if feature_contributions %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-primary">Analisis Kontribusi Fitur</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Tabel di kolom kiri -->
+                        <div class="col-md-6">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Bulan</th>
+                                            <th>Kontribusi PC1</th>
+                                            {% if feature_contributions[0].PC2_contribution is defined %}
+                                            <th>Kontribusi PC2</th>
+                                            {% endif %}
+                                            <th>Data Tersedia (%)</th>
+                                            <th>Rata-rata</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for feature in feature_contributions %}
+                                        <tr>
+                                            <td>{{ feature.Bulan }}</td>
+                                            <td>{{ "%.4f"|format(feature.PC1_contribution) }}</td>
+                                            {% if feature.PC2_contribution is defined %}
+                                            <td>{{ "%.4f"|format(feature.PC2_contribution) }}</td>
+                                            {% endif %}
+                                            <td>{{ "%.1f"|format(feature.Data_Availability) }}</td>
+                                            <td>{{ "%.2f"|format(feature.Mean_Value) }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- Interpretasi di kolom kanan -->
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-light">
+                                    <h6 class="m-0 font-weight-bold">Interpretasi Kontribusi:</h6>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                        {% for interpretation in variance_interpretations %}
+                                        <li class="list-group-item">{{ interpretation }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% include 'footer.html' %}
